@@ -2,6 +2,13 @@
     padding: 10px;
     margin: 0 auto;
     max-width: 450px;
-    background: #fff;
-    flex: 1; 
+    background-color: var(--background-color);
+    flex: 1;
+    min-height: calc(100vh - var(--bottom-menu-height) - var(--header-height));
+}
+
+.centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

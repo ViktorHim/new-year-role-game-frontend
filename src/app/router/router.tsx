@@ -1,48 +1,58 @@
-import { createBrowserRouter, Navigate } from "react-router";
-import { RequireAuth } from "../../features/auth";
-import { RoutePath } from "../../shared/config";
-import { SignInPage } from "../../pages/sign-in";
-import { Layout } from "../layout";
-import { Page } from "../../shared/ui";
+import { createBrowserRouter, Navigate } from 'react-router';
+import { RequireAuth } from '../../features/auth';
+import { RoutePath } from '../../shared/config';
+import { Layout } from '../layout';
+
+import { SignInPage } from '../../pages/sign-in';
+import { StoryPage } from '@/pages/story';
+import { CharacterPage } from '@/pages/character';
+import { FractionPage } from '@/pages/fraction';
+import { RulesPage } from '@/pages/rules';
+import { MapPage } from '@/pages/map';
+import { NotFoundPage } from '@/pages/not-found-page';
 
 export const router = createBrowserRouter([
     {
         path: '/',
-        element: <RequireAuth/>,
+        element: <RequireAuth />,
         children: [
             {
-                element: <Layout/>,
+                element: <Layout />,
                 children: [
                     {
                         path: '/',
-                        element: <Navigate to={RoutePath.STORY}/>
+                        element: <Navigate to={RoutePath.STORY} />,
                     },
                     {
                         path: RoutePath.STORY,
-                        element: <Page>История</Page>
+                        element: <StoryPage />,
                     },
-                                        {
+                    {
                         path: RoutePath.CHARACTER,
-                        element: <Page>Персонаж</Page>
+                        element: <CharacterPage />,
                     },
-                                        {
+                    {
                         path: RoutePath.FRACTION,
-                        element: <Page>Фракция</Page>
+                        element: <FractionPage />,
                     },
-                                        {
+                    {
                         path: RoutePath.RULES,
-                        element: <Page>Правила</Page>
+                        element: <RulesPage />,
                     },
-                                        {
+                    {
                         path: RoutePath.MAP,
-                        element: <Page>Карта</Page>
-                    }
-                ]
-            }
-        ]
+                        element: <MapPage />,
+                    },
+                ],
+            },
+        ],
     },
     {
         path: RoutePath.SIGN_IN,
-        element: <SignInPage/>
-    }
-])
+        element: <SignInPage />,
+    },
+    {
+        path: RoutePath.NOT_FOUND,
+        element: <NotFoundPage />,
+    },
+]);
