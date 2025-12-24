@@ -6,9 +6,9 @@ export const Header = () => {
     const { user, logout } = useAuth();
     return (
         <header className={styles.header}>
-            <p className={styles.text}>
+            {/* <p className={styles.text}>
                 {user?.name} ({user?.game_role})
-            </p>
+            </p> */}
             <ArrowRightStartOnRectangleIcon
                 onClick={logout}
                 fill="white"

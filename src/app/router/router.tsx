@@ -20,7 +20,7 @@ export const router = createBrowserRouter([
                 element: <Layout />,
                 children: [
                     {
-                        path: '/',
+                        index: true,
                         element: <Navigate to={RoutePath.STORY} />,
                     },
                     {

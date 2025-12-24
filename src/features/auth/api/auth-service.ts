@@ -10,7 +10,9 @@ const endpoints = {
 export const AuthService = {
     getUser: (): Promise<AxiosResponse<User>> => {
         // return http.get(endpoints.user);
-        return Promise.resolve({ data: { id: 1, role: 1, name: 'Я вахуе', game_role: 'Врач' } });
+        return Promise.resolve({
+            data: { id: 1, role: 1, name: 'Иван иваныч', game_role: 'Врач' },
+        });
     },
     signIn: (login: string): Promise<AxiosResponse<{ token: string }>> => {
         // return http.post(endpoints.signIn, {login});

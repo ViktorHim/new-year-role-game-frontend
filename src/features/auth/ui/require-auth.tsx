@@ -7,7 +7,7 @@ interface RequireAuthProps {
 }
 
 export const RequireAuth = ({ redirectTo = RoutePath.SIGN_IN }: RequireAuthProps) => {
-    const { isAuth } = useAuth();
+    const { isAuth, isLoading } = useAuth();
 
     if (!isAuth) {
         return <Navigate to={redirectTo} />;
