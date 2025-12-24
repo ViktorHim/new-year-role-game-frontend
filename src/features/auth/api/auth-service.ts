@@ -1,21 +1,17 @@
 import type { AxiosResponse } from 'axios';
 import { http } from '@shared/api';
-import type { User } from '../model/types';
+import type { IPlayer, ISignInResponse } from '../model/types';
 
 const endpoints = {
-    signIn: '/sign-in',
-    user: '/user',
+    signIn: '/auth/login',
+    user: '/player/me',
 };
 
 export const AuthService = {
-    getUser: (): Promise<AxiosResponse<User>> => {
-        // return http.get(endpoints.user);
-        return Promise.resolve({
-            data: { id: 1, role: 1, name: 'Иван иваныч', game_role: 'Врач' },
-        });
+    getUser: (): Promise<AxiosResponse<IPlayer>> => {
+        return http.get(endpoints.user);
     },
-    signIn: (login: string): Promise<AxiosResponse<{ token: string }>> => {
-        // return http.post(endpoints.signIn, {login});
-        return Promise.resolve({ data: { token: 'token' } });
+    signIn: (username: string, password: string): Promise<AxiosResponse<ISignInResponse>> => {
+        return http.post(endpoints.signIn, { username, password });
     },
 };

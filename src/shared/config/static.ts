@@ -1,14 +1,5 @@
-import { Page } from '@/shared/ui';
-import { Title } from '@/shared/ui/title';
-import { PhotoIcon } from '@heroicons/react/16/solid';
-
-export const MapPage = () => {
-    return (
-        <Page>
-            <div className="mb-6">
-                <Title classname="mb-3">Карта</Title>
-                <PhotoIcon style={{ width: '80%' }} />
-                <p className="text-slate-700 leading-relaxed">{`текст текст текст текст 
+export const STATIC = {
+    STORY: `        текст текст текст текст 
                     текст текст текст текст 
                     текст текст текст текст 
                     текст текст текст текст 
@@ -19,8 +10,5 @@ export const MapPage = () => {
                     текст текст текст текст 
                     текст текст текст текст 
                     текст текст текст текст 
-                    текст текст текст текст`}</p>
-            </div>
-        </Page>
-    );
+                    текст текст текст текст`,
 };

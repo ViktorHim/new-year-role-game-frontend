@@ -1,2 +1,2 @@
 export type { IGoal } from './model/types';
-export { Goal } from './ui/goal';
+export { Goal, type GoalVariant } from './ui/goal';

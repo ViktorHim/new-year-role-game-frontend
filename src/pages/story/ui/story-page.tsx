@@ -1,36 +1,20 @@
 import { Page } from '@/shared/ui';
 import { PlayerStory } from './player-story';
 import { InfoAboutPlayers } from './info-about-players';
-
-const knownInfo = [
-    'Александра Петрова работает в полиции и имеет доступ к секретным документам',
-    'Дмитрий Волков замечен в подозрительных встречах с известными криминальными авторитетами',
-    'Елена Соколова владеет информацией о коррупции в городской администрации',
-];
-
-const history =
-    'Виктор Романов - успешный бизнесмен средних лет, владелец сети ресторанов в центре города. За внешним благополучием скрывается человек, который готов на многое ради своей семьи и бизнеса. Он знает, что в этом городе невозможно остаться в стороне от войны между фракциями.';
+import { STATIC } from '@/shared/config/static';
+import { useAuth } from '@/features/auth';
+import { Title } from '@/shared/ui/title';
 
 export const StoryPage = () => {
+    const { player } = useAuth();
     return (
         <Page>
             <div className="mb-6">
-                <h2 className="text-xl font-bold text-slate-800 mb-3">История</h2>
-                <p className="text-slate-700 leading-relaxed">{`текст текст текст текст 
-                    текст текст текст текст 
-                    текст текст текст текст 
-                    текст текст текст текст 
-                    текст текст текст текст 
-                    текст текст текст текст 
-                    текст текст текст текст 
-                    текст текст текст текст 
-                    текст текст текст текст 
-                    текст текст текст текст 
-                    текст текст текст текст 
-                    текст текст текст текст`}</p>
+                <Title classname="mb-3">История</Title>
+                <p className="text-slate-700 leading-relaxed">{STATIC.STORY}</p>
             </div>
-            <PlayerStory story={history} />
-            <InfoAboutPlayers info={knownInfo} />
+            <PlayerStory story={player!.description} />
+            <InfoAboutPlayers info={player!.info_about_players} />
         </Page>
     );
 };

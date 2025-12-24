@@ -9,7 +9,8 @@ import { Button } from '@/shared/ui/button';
 
 export const SignInPage = () => {
     const { signIn, isAuth } = useAuth();
-    const [login, setLogin] = useState<string>('');
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
 
     if (isAuth) {
         return <Navigate to={RoutePath.STORY} />;
@@ -17,7 +18,7 @@ export const SignInPage = () => {
 
     const handleSignIn: MouseEventHandler<HTMLButtonElement> = (e) => {
         e.preventDefault();
-        signIn(login);
+        signIn(username, password);
     };
 
     return (
@@ -31,8 +32,13 @@ export const SignInPage = () => {
                     <form className="space-y-4">
                         <Input
                             placeholder="Логин"
-                            value={login}
-                            onChange={(e) => setLogin(e.target.value)}
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
+                        <Input
+                            placeholder="Пароль"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
 
                         <Button className="w-full" type="submit" onClick={handleSignIn}>

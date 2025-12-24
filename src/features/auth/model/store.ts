@@ -1,55 +1,63 @@
 import { create } from 'zustand';
 import { LocalStorageKeys } from '../../../shared/config';
 import { AuthService } from '../api/auth-service';
-import type { User } from './types';
+import type { IPlayer } from './types';
 
 interface AuthStore {
-    user: User | null;
+    player: IPlayer | null;
+    isAdmin: boolean;
     isLoading: boolean;
     isAuth: boolean;
     getUser: () => Promise<void>;
-    signIn: (login: string) => Promise<void>;
+    signIn: (username: string, password: string) => Promise<void>;
     logout: () => void;
 }
 
 export const useAuth = create<AuthStore>((set) => ({
-    user: null,
+    player: null,
     isLoading: true,
+    isAdmin: false,
     isAuth: false,
 
     getUser: async () => {
         const token = localStorage.getItem(LocalStorageKeys.TOKEN);
         if (!token) {
-            set({ isAuth: false, user: null });
+            set({ isAuth: false, player: null, isLoading: false });
             return;
         }
 
         try {
             set({ isLoading: true });
             const response = await AuthService.getUser();
-            set({ isAuth: true, user: response.data });
+            set({ isAuth: true, player: response.data });
         } catch {
-            set({ isAuth: false, user: null });
+            localStorage.removeItem(LocalStorageKeys.TOKEN);
+            localStorage.removeItem(LocalStorageKeys.IS_ADMIN);
+            set({ isAuth: false, player: null });
         } finally {
             set({ isLoading: false });
         }
     },
 
-    signIn: async (login: string) => {
+    signIn: async (username: string, password: string) => {
         try {
-            const response = await AuthService.signIn(login);
+            const response = await AuthService.signIn(username, password);
             localStorage.setItem(LocalStorageKeys.TOKEN, response.data.token);
+            localStorage.setItem(
+                LocalStorageKeys.IS_ADMIN,
+                JSON.stringify(response?.data?.user?.is_admin || false),
+            );
 
             const responseUser = await AuthService.getUser();
-            set({ isAuth: true, user: responseUser.data });
+            set({ isAuth: true, player: responseUser.data });
         } catch {
-            set({ isAuth: false, user: null });
+            set({ isAuth: false, player: null });
         }
     },
 
     logout: () => {
         localStorage.removeItem(LocalStorageKeys.TOKEN);
-
-        set({ user: null, isAuth: false });
+        localStorage.removeItem(LocalStorageKeys.IS_ADMIN);
+        set({ player: null, isAuth: false });
     },
 }));

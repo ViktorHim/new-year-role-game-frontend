@@ -1,10 +1,11 @@
 import { Checkbox } from '@/shared/ui/checkbox';
 import type { IGoal } from '../model/types';
 
+export type GoalVariant = 'personal' | 'faction';
 interface GoalProps {
     data: IGoal;
     onToggle: (id: number | string) => void;
-    variant?: 'personal' | 'faction';
+    variant?: GoalVariant;
     disabled?: boolean;
     className?: string;
 }
