@@ -4,19 +4,13 @@ import type { IGoal } from '../model/types';
 export type GoalVariant = 'personal' | 'faction';
 interface GoalProps {
     data: IGoal;
-    onToggle: (id: number | string) => void;
+    onToggle: (id: number) => void;
     variant?: GoalVariant;
     disabled?: boolean;
     className?: string;
 }
 
-export const Goal = ({
-    onToggle,
-    data,
-    variant = 'personal',
-    disabled = false,
-    className = '',
-}: GoalProps) => {
+export const Goal = ({ onToggle, data, variant = 'personal', className = '' }: GoalProps) => {
     const variantStyles = {
         personal: {
             default: 'bg-white border-slate-200 hover:border-slate-300',
@@ -32,24 +26,26 @@ export const Goal = ({
 
     const styles = variantStyles[variant];
 
-    const { id, description, completed } = data;
+    const { id, description, isCompleted, disabled } = data;
 
     return (
         <div
             className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                completed ? styles.completed : styles.default
+                isCompleted ? styles.completed : styles.default
             } ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}
             onClick={() => !disabled && onToggle(id)}
         >
             <div className="flex items-start gap-3">
                 <Checkbox
-                    checked={completed}
+                    checked={isCompleted}
                     onCheckedChange={() => !disabled && onToggle(id)}
                     disabled={disabled}
                     className={`mt-0.5 w-5 h-5 rounded border-2 ${styles.checkbox}`}
                     onClick={(e) => e.stopPropagation()}
                 />
-                <p className={`text-slate-700 leading-relaxed ${completed ? 'line-through' : ''}`}>
+                <p
+                    className={`text-slate-700 leading-relaxed ${isCompleted ? 'line-through' : ''}`}
+                >
                     {description}
                 </p>
             </div>

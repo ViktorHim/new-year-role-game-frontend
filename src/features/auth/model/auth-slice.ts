@@ -1,9 +1,9 @@
-import { create } from 'zustand';
-import { LocalStorageKeys } from '../../../shared/config';
+import { LocalStorageKeys } from '@/shared/config';
+import type { ImmerSlice } from '@/app/store';
 import { AuthService } from '../api/auth-service';
 import type { IPlayer } from './types';
 
-interface AuthStore {
+export interface AuthStore {
     player: IPlayer | null;
     isAdmin: boolean;
     isLoading: boolean;
@@ -13,7 +13,7 @@ interface AuthStore {
     logout: () => void;
 }
 
-export const useAuth = create<AuthStore>((set) => ({
+export const createAuthSlice: ImmerSlice<AuthStore> = (set) => ({
     player: null,
     isLoading: true,
     isAdmin: false,
@@ -22,20 +22,32 @@ export const useAuth = create<AuthStore>((set) => ({
     getUser: async () => {
         const token = localStorage.getItem(LocalStorageKeys.TOKEN);
         if (!token) {
-            set({ isAuth: false, player: null, isLoading: false });
+            set((state) => {
+                state.auth.isAuth = false;
+                state.auth.player = null;
+                state.auth.isLoading = false;
+            });
             return;
         }
 
         try {
-            set({ isLoading: true });
+            set((state) => {
+                state.auth.isLoading = true;
+            });
             const response = await AuthService.getUser();
-            set({ isAuth: true, player: response.data });
+            set((state) => {
+                state.auth.isAuth = true;
+                state.auth.player = response.data;
+                state.auth.isLoading = false;
+            });
         } catch {
             localStorage.removeItem(LocalStorageKeys.TOKEN);
             localStorage.removeItem(LocalStorageKeys.IS_ADMIN);
-            set({ isAuth: false, player: null });
-        } finally {
-            set({ isLoading: false });
+            set((state) => {
+                state.auth.isAuth = false;
+                state.auth.player = null;
+                state.auth.isLoading = false;
+            });
         }
     },
 
@@ -49,15 +61,24 @@ export const useAuth = create<AuthStore>((set) => ({
             );
 
             const responseUser = await AuthService.getUser();
-            set({ isAuth: true, player: responseUser.data });
+            set((state) => {
+                state.auth.isAuth = true;
+                state.auth.player = responseUser.data;
+            });
         } catch {
-            set({ isAuth: false, player: null });
+            set((state) => {
+                state.auth.isAuth = false;
+                state.auth.player = null;
+            });
         }
     },
 
     logout: () => {
         localStorage.removeItem(LocalStorageKeys.TOKEN);
         localStorage.removeItem(LocalStorageKeys.IS_ADMIN);
-        set({ player: null, isAuth: false });
+        set((state) => {
+            state.auth.player = null;
+            state.auth.isAuth = false;
+        });
     },
-}));
+});

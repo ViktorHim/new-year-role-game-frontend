@@ -1,2 +1,2 @@
 export { RequireAuth } from './ui/require-auth';
-export { useAuth } from './model/store';
+export { type AuthStore, createAuthSlice } from './model/auth-slice';

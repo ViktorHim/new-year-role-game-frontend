@@ -1,9 +1,9 @@
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/16/solid';
 import styles from './styles.module.css';
-import { useAuth } from '@/features/auth';
+import { useAuth } from '@/features/auth/store';
 
 export const Header = () => {
-    const { user, logout } = useAuth();
+    const { logout } = useAuth();
     return (
         <header className={styles.header}>
             {/* <p className={styles.text}>

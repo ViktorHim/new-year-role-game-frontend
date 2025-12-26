@@ -2,7 +2,7 @@ import { Page } from '@/shared/ui';
 import { PlayerStory } from './player-story';
 import { InfoAboutPlayers } from './info-about-players';
 import { STATIC } from '@/shared/config/static';
-import { useAuth } from '@/features/auth';
+import { useAuth } from '@/features/auth/store';
 import { Title } from '@/shared/ui/title';
 
 export const StoryPage = () => {

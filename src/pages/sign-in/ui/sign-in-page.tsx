@@ -1,4 +1,4 @@
-import { useAuth } from '@/features/auth';
+import { useAuth } from '@/features/auth/store';
 import { Page } from '../../../shared/ui';
 import { useState, type MouseEventHandler } from 'react';
 import { Navigate } from 'react-router';

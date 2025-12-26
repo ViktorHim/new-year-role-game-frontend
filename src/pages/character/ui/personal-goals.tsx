@@ -1,28 +1,23 @@
-import { Goal, type IGoal } from '@/entities/goal';
-import { useState } from 'react';
-
-interface PersonalGoalsProps {
-    goals: IGoal[];
-    toggleGoal: (goalId: number | string) => void;
-}
+import { useGoals } from '@/entities/goal/store';
+import { Goal } from '@/entities/goal';
+import { Title } from '@/shared/ui/title';
 
 export const PersonalGoals = () => {
-    const [goals, setGoals] = useState(mockPlayerData.personalGoals);
-
-    const toggleGoal = (goalId) => {
-        setGoals((prev) =>
-            prev.map((goal) =>
-                goal.id === goalId ? { ...goal, completed: !goal.completed } : goal,
-            ),
-        );
-    };
+    const { personalGoals, togglePersonalGoal } = useGoals();
 
     return (
         <div className="mb-6">
-            <h2 className="text-xl font-bold text-slate-800 mb-3">Личные цели</h2>
+            <Title tier={2} classname="mb-3">
+                Личные цели
+            </Title>
             <div className="space-y-2">
-                {goals.map((goal) => (
-                    <Goal data={goal} onToggle={toggleGoal} variant="personal" />
+                {personalGoals.map((goal) => (
+                    <Goal
+                        key={goal.id}
+                        data={goal}
+                        onToggle={() => togglePersonalGoal(goal.id, !goal.isCompleted)}
+                        variant="personal"
+                    />
                 ))}
             </div>
         </div>

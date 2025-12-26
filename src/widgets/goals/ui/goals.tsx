@@ -2,7 +2,7 @@ import { Goal, type GoalVariant, type IGoal } from '@/entities/goal';
 
 interface GoalsProps {
     goals: IGoal[];
-    toggleGoal: (goalId: number | string) => void;
+    toggleGoal: (goalId: number) => void;
     variant: GoalVariant;
 }
 

@@ -1,1 +1,1 @@
-export { useFaction } from './model/store';
+export { createFactionSlice, type FactionStore } from './model/faction-slice';

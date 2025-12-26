@@ -30,7 +30,7 @@ export const FactionTable = ({
             <div className="bg-white border border-slate-200 overflow-hidden">
                 <Table>
                     <TableBody>
-                        {members.map((member) => (
+                        {members?.map((member) => (
                             <TableRow
                                 key={member.id}
                                 className={`${
