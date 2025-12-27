@@ -14,15 +14,9 @@ import { FactionChangeCard } from './faction-change-card';
 import { InfoCard } from '@/shared/ui/info-card/info-card';
 
 export const FractionPage = () => {
-    const {
-        myFactionInfo,
-        otherFactionsInfo,
-        isFactionsListLoading,
-        getFactionList,
-        changeFaction,
-    } = useFaction();
+    const { myFactionInfo, otherFactionsInfo, getFactionList, changeFaction } = useFaction();
     const factionsToChange = useFactionsToChange();
-    const { getFactionGoals, isFactionLoading } = useGoals();
+    const { getFactionGoals } = useGoals();
     const { player } = useAuth();
 
     const [visible, setVisible] = useState(false);
