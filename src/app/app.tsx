@@ -6,18 +6,18 @@ import { Toaster } from 'sonner';
 import { usePlayers } from '@/entities/players/store';
 
 export const App = () => {
-    const { isLoading, getUser, isAuth } = useAuth();
+    const { isLoading, getUser, isAuth, isAdmin } = useAuth();
     const { getPlayerList } = usePlayers();
 
     useEffect(() => {
         getUser();
-    }, []);
+    }, [getUser]);
 
     useEffect(() => {
-        if (isAuth) {
+        if (isAuth && !isAdmin) {
             getPlayerList();
         }
-    }, [isAuth, getPlayerList]);
+    }, [isAuth, getPlayerList, isAdmin]);
 
     if (isLoading) {
         return <div>Загрузка...</div>;

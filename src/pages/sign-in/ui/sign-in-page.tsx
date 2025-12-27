@@ -13,7 +13,7 @@ export const SignInPage = () => {
     const [password, setPassword] = useState<string>('');
 
     if (isAuth && isAdmin) {
-        return <Navigate to={RoutePath.STORY} />;
+        return <Navigate to={RoutePath.ADMIN_HOME} />;
     } else if (isAuth) {
         return <Navigate to={RoutePath.STORY} />;
     }

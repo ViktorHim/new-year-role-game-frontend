@@ -13,7 +13,7 @@ export interface AuthStore {
     logout: () => void;
 }
 
-export const createAuthSlice: ImmerSlice<AuthStore> = (set) => ({
+export const createAuthSlice: ImmerSlice<AuthStore> = (set, get) => ({
     player: null,
     isLoading: true,
     isAdmin: false,
@@ -21,9 +21,23 @@ export const createAuthSlice: ImmerSlice<AuthStore> = (set) => ({
 
     getUser: async () => {
         const token = localStorage.getItem(LocalStorageKeys.TOKEN);
+        const isAdminStr = localStorage.getItem(LocalStorageKeys.IS_ADMIN);
+        const isAdmin = isAdminStr ? JSON.parse(isAdminStr) : false;
+
         if (!token) {
             set((state) => {
                 state.auth.isAuth = false;
+                state.auth.isAdmin = false;
+                state.auth.player = null;
+                state.auth.isLoading = false;
+            });
+            return;
+        }
+
+        if (isAdmin) {
+            set((state) => {
+                state.auth.isAuth = true;
+                state.auth.isAdmin = true;
                 state.auth.player = null;
                 state.auth.isLoading = false;
             });
@@ -37,6 +51,7 @@ export const createAuthSlice: ImmerSlice<AuthStore> = (set) => ({
             const response = await AuthService.getUser();
             set((state) => {
                 state.auth.isAuth = true;
+                state.auth.isAdmin = false;
                 state.auth.player = response.data;
                 state.auth.isLoading = false;
             });
@@ -45,6 +60,7 @@ export const createAuthSlice: ImmerSlice<AuthStore> = (set) => ({
             localStorage.removeItem(LocalStorageKeys.IS_ADMIN);
             set((state) => {
                 state.auth.isAuth = false;
+                state.auth.isAdmin = false;
                 state.auth.player = null;
                 state.auth.isLoading = false;
             });
@@ -54,21 +70,18 @@ export const createAuthSlice: ImmerSlice<AuthStore> = (set) => ({
     signIn: async (username: string, password: string) => {
         try {
             const response = await AuthService.signIn(username, password);
-            localStorage.setItem(LocalStorageKeys.TOKEN, response.data.token);
-            localStorage.setItem(
-                LocalStorageKeys.IS_ADMIN,
-                JSON.stringify(response?.data?.user?.is_admin || false),
-            );
+            const isAdmin = response?.data?.user?.is_admin || false;
 
-            const responseUser = await AuthService.getUser();
-            set((state) => {
-                state.auth.isAuth = true;
-                state.auth.player = responseUser.data;
-            });
+            localStorage.setItem(LocalStorageKeys.TOKEN, response.data.token);
+            localStorage.setItem(LocalStorageKeys.IS_ADMIN, JSON.stringify(isAdmin));
+
+            get().auth.getUser();
         } catch {
             set((state) => {
+                state.auth.isAdmin = false;
                 state.auth.isAuth = false;
                 state.auth.player = null;
+                state.auth.isLoading = false;
             });
         }
     },
@@ -79,6 +92,8 @@ export const createAuthSlice: ImmerSlice<AuthStore> = (set) => ({
         set((state) => {
             state.auth.player = null;
             state.auth.isAuth = false;
+            state.auth.isAdmin = false;
+            state.auth.isLoading = false;
         });
     },
 });

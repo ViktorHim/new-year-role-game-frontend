@@ -11,6 +11,7 @@ import { NoFactionCard } from './no-faction-card';
 import { SelectFactionModal } from './select-faction-modal';
 import { useFactionsToChange } from '@/entities/faction/model/use-faction';
 import { FactionChangeCard } from './faction-change-card';
+import { InfoCard } from '@/shared/ui/info-card/info-card';
 
 export const FractionPage = () => {
     const {
@@ -31,7 +32,7 @@ export const FractionPage = () => {
         getFactionGoals();
     }, []);
 
-    if (isFactionsListLoading || isFactionLoading) return <div>Загрузка...</div>;
+    // if (isFactionsListLoading || isFactionLoading) return <div>Загрузка...</div>;
 
     return (
         <Page>
@@ -80,7 +81,7 @@ export const FractionPage = () => {
                     </div>
                 ))
             ) : (
-                <p>У вас нет информации о других фракциях</p>
+                <InfoCard variant="info">У вас нет информации о других фракциях</InfoCard>
             )}
             <SelectFactionModal
                 factions={factionsToChange}

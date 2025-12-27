@@ -1,9 +1,10 @@
 import { createAbilitySlice, type AbilityStore } from '@/entities/ability';
 import { createBalanceSlice, type BalanceStore } from '@/entities/balance';
+import { createContractSlice, type ContractStore } from '@/entities/contract';
 import { createFactionSlice, type FactionStore } from '@/entities/faction';
 import { createGoalsSlice, type GoalsStore } from '@/entities/goal';
+import { createInventorySlice, type InventoryStore } from '@/entities/inventory';
 import { createPlayersSlice, type PlayersStore } from '@/entities/players';
-import { createTransferSlice, type TransferStore } from '@/entities/transfer';
 import { createAuthSlice, type AuthStore } from '@/features/auth';
 import { create, type StateCreator } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
@@ -14,8 +15,9 @@ export type AppStore = {
     goals: GoalsStore;
     auth: AuthStore;
     players: PlayersStore;
-    transfer: TransferStore;
     ability: AbilityStore;
+    inventory: InventoryStore;
+    contract: ContractStore;
 };
 
 export type ImmerSlice<T> = StateCreator<AppStore, [['zustand/immer', never]], [], T>;
@@ -27,7 +29,8 @@ export const useAppStore = create<AppStore>()(
         faction: createFactionSlice(...args),
         goals: createGoalsSlice(...args),
         players: createPlayersSlice(...args),
-        transfer: createTransferSlice(...args),
         ability: createAbilitySlice(...args),
+        inventory: createInventorySlice(...args),
+        contract: createContractSlice(...args),
     })),
 );

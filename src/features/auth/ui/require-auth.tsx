@@ -23,13 +23,13 @@ export const RequireAuth = ({
         return <Navigate to={redirectTo} replace />;
     }
 
-    // if (adminOnly && !isAdmin) {
-    //     return <Navigate to={RoutePath.STORY} replace />;
-    // }
+    if (adminOnly && !isAdmin) {
+        return <Navigate to={RoutePath.STORY} replace />;
+    }
 
-    // if (playerOnly && isAdmin) {
-    //     return <Navigate to={RoutePath.ADMIN} replace />;
-    // }
+    if (playerOnly && isAdmin) {
+        return <Navigate to={RoutePath.ADMIN} replace />;
+    }
 
     return <Outlet />;
 };

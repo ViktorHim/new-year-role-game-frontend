@@ -2,6 +2,7 @@ import type { IGoal } from './types';
 import { GoalService } from '../api/GoalService';
 import { goalsResponseMapper } from './mappers';
 import type { ImmerSlice } from '@/app/store';
+import { toast } from 'sonner';
 
 export interface GoalsStore {
     personalGoals: IGoal[];
@@ -68,7 +69,8 @@ export const createGoalsSlice: ImmerSlice<GoalsStore> = (set, get) => ({
 
         try {
             const response = await GoalService.toggleGoal(id, isCompleted);
-            get().balance.chageInfluence(response.data.influence_change);
+            toast(response.data.influence_change);
+            get().balance.getBalance();
         } catch {
             set((state) => {
                 state.goals.personalGoals = previousGoals;
@@ -87,6 +89,7 @@ export const createGoalsSlice: ImmerSlice<GoalsStore> = (set, get) => ({
 
         try {
             await GoalService.toggleGoal(id, isCompleted);
+            get().faction.getFactionList();
         } catch {
             set((state) => {
                 state.goals.factionGoals = previousGoals;

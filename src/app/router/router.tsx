@@ -11,6 +11,8 @@ import { RulesPage } from '@/pages/rules';
 import { MapPage } from '@/pages/map';
 import { NotFoundPage } from '@/pages/not-found-page';
 import { AdminHome } from '@/pages/admin-home';
+import { AdminPlayers } from '@/pages/admin-players';
+import { AdminFactions } from '@/pages/admin-factions';
 
 export const router = createBrowserRouter([
     {
@@ -21,41 +23,41 @@ export const router = createBrowserRouter([
         path: RoutePath.NOT_FOUND,
         element: <NotFoundPage />,
     },
-    // {
-    //     path: RoutePath.ROOT,
-    //     element: <RequireAuth playerOnly={true} />,
-    //     children: [
-    //         {
-    //             element: <Layout isAdmin={false}/>,
-    //             children: [
-    //                 {
-    //                     index: true,
-    //                     element: <Navigate to={RoutePath.STORY} />,
-    //                 },
-    //                 {
-    //                     path: RoutePath.STORY,
-    //                     element: <StoryPage />,
-    //                 },
-    //                 {
-    //                     path: RoutePath.CHARACTER,
-    //                     element: <CharacterPage />,
-    //                 },
-    //                 {
-    //                     path: RoutePath.FRACTION,
-    //                     element: <FractionPage />,
-    //                 },
-    //                 {
-    //                     path: RoutePath.RULES,
-    //                     element: <RulesPage />,
-    //                 },
-    //                 {
-    //                     path: RoutePath.MAP,
-    //                     element: <MapPage />,
-    //                 },
-    //             ],
-    //         },
-    //     ],
-    // },
+    {
+        path: RoutePath.ROOT,
+        element: <RequireAuth playerOnly={true} />,
+        children: [
+            {
+                element: <Layout isAdmin={false} />,
+                children: [
+                    {
+                        index: true,
+                        element: <Navigate to={RoutePath.STORY} />,
+                    },
+                    {
+                        path: RoutePath.STORY,
+                        element: <StoryPage />,
+                    },
+                    {
+                        path: RoutePath.CHARACTER,
+                        element: <CharacterPage />,
+                    },
+                    {
+                        path: RoutePath.FRACTION,
+                        element: <FractionPage />,
+                    },
+                    {
+                        path: RoutePath.RULES,
+                        element: <RulesPage />,
+                    },
+                    {
+                        path: RoutePath.MAP,
+                        element: <MapPage />,
+                    },
+                ],
+            },
+        ],
+    },
     {
         path: RoutePath.ADMIN,
         element: <RequireAuth adminOnly={true} />,
@@ -70,6 +72,14 @@ export const router = createBrowserRouter([
                     {
                         path: RoutePath.ADMIN_HOME,
                         element: <AdminHome />,
+                    },
+                    {
+                        path: RoutePath.ADMIN_PLAYERS,
+                        element: <AdminPlayers />,
+                    },
+                    {
+                        path: RoutePath.ADMIN_FACTIONS,
+                        element: <AdminFactions />,
                     },
                 ],
             },

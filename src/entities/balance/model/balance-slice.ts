@@ -1,32 +1,26 @@
-import type { IBalance } from './types';
+import type { IBalance, ITransferMoneyPayload } from './types';
 import { BalanceService } from '../api/balance-service';
 import type { ImmerSlice } from '@/app/store';
 import { toast } from 'sonner';
 
 export interface BalanceStore extends IBalance {
     isLoading: boolean;
+    isTransferLoading: boolean;
     getBalance: () => Promise<void>;
     chageInfluence: (amount: number) => void;
-    changeBalance: (amount: number) => void;
+    transferMoney: (payload: ITransferMoneyPayload) => Promise<void>;
 }
 
-export const createBalanceSlice: ImmerSlice<BalanceStore> = (set) => ({
+export const createBalanceSlice: ImmerSlice<BalanceStore> = (set, get) => ({
     money: 0,
     influence: 0,
     isLoading: false,
+    isTransferLoading: false,
 
     chageInfluence: (amount) => {
         if (!amount) return;
         set((state) => {
             state.balance.influence += amount;
-            toast(amount);
-        });
-    },
-
-    changeBalance: (amount) => {
-        if (!amount) return;
-        set((state) => {
-            state.balance.money += amount;
             toast(amount);
         });
     },
@@ -48,6 +42,25 @@ export const createBalanceSlice: ImmerSlice<BalanceStore> = (set) => ({
                 state.balance.money = 0;
                 state.balance.influence = 0;
                 state.balance.isLoading = false;
+            });
+        }
+    },
+
+    transferMoney: async (payload) => {
+        set((state) => {
+            state.balance.isTransferLoading = true;
+        });
+
+        try {
+            const response = await BalanceService.transferMoney(payload);
+            set((state) => {
+                state.balance.isTransferLoading = false;
+            });
+            toast(-response.data.amount);
+            get().balance.getBalance();
+        } catch {
+            set((state) => {
+                state.balance.isTransferLoading = false;
             });
         }
     },
