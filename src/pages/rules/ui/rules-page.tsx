@@ -1,3 +1,4 @@
+import { STATIC } from '@/shared/config/static';
 import { Page } from '@/shared/ui';
 import { Title } from '@/shared/ui/title';
 
@@ -6,18 +7,7 @@ export const RulesPage = () => {
         <Page>
             <div className="mb-6">
                 <Title classname="mb-3">Правила</Title>
-                <p className="text-slate-700 leading-relaxed">{`текст текст текст текст 
-                    текст текст текст текст 
-                    текст текст текст текст 
-                    текст текст текст текст 
-                    текст текст текст текст 
-                    текст текст текст текст 
-                    текст текст текст текст 
-                    текст текст текст текст 
-                    текст текст текст текст 
-                    текст текст текст текст 
-                    текст текст текст текст 
-                    текст текст текст текст`}</p>
+                <p className="text-slate-700 leading-relaxed">{STATIC.RULES}</p>
             </div>
         </Page>
     );

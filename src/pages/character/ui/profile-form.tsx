@@ -13,13 +13,9 @@ import {
     DialogDescription,
 } from '@/shared/ui/dialog';
 import { Input } from '@/shared/ui/input';
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/shared/ui/select';
 import { Send } from 'lucide-react';
-
-interface Player {
-    id: number;
-    name: string;
-}
+import { useTransfer } from '@/entities/transfer/store';
+import { PlayerSelect } from '@/entities/players';
 
 interface ProfileFormProps {
     avatar?: string | null;
@@ -28,8 +24,6 @@ interface ProfileFormProps {
     money?: number | null;
     influence?: number | null;
     name?: string | null;
-    players?: Player[];
-    onTransferMoney?: (playerId: string, amount: number) => void;
 }
 
 export const ProfileForm = ({
@@ -39,18 +33,18 @@ export const ProfileForm = ({
     name = 'нет данных',
     money = 0,
     influence = 0,
-    players = [],
-    onTransferMoney,
 }: ProfileFormProps) => {
+    const { transferMoney } = useTransfer();
     const [showMoneyTransfer, setShowMoneyTransfer] = useState(false);
     const [transferAmount, setTransferAmount] = useState('');
-    const [selectedPlayer, setSelectedPlayer] = useState('');
+    const [selectedPlayer, setSelectedPlayer] = useState<number | undefined>(undefined);
     const [transferError, setTransferError] = useState('');
 
-    const handleMoneyTransfer = () => {
+    const handleMoneyTransfer = async () => {
         const amount = parseInt(transferAmount);
+        const id = selectedPlayer;
 
-        if (!selectedPlayer) {
+        if (!id) {
             setTransferError('Выберите получателя');
             return;
         }
@@ -63,13 +57,11 @@ export const ProfileForm = ({
             return;
         }
 
-        // Вызов колбэка
-        onTransferMoney?.(selectedPlayer, amount);
+        await transferMoney({ amount, to_player_id: id });
 
-        // Закрытие диалога и сброс
         setShowMoneyTransfer(false);
         setTransferAmount('');
-        setSelectedPlayer('');
+        setSelectedPlayer(undefined);
         setTransferError('');
     };
 
@@ -100,7 +92,6 @@ export const ProfileForm = ({
                 </div>
             </div>
 
-            {/* Диалог перевода денег */}
             <Dialog open={showMoneyTransfer} onOpenChange={setShowMoneyTransfer}>
                 <DialogContent className="sm:max-w-md">
                     <DialogHeader>
@@ -113,18 +104,7 @@ export const ProfileForm = ({
                     <div className="space-y-4 py-2">
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-slate-700">Получатель</label>
-                            <Select value={selectedPlayer} onValueChange={setSelectedPlayer}>
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Выберите игрока" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {players.map((player) => (
-                                        <SelectItem key={player.id} value={player.id.toString()}>
-                                            {player.name}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
+                            <PlayerSelect value={selectedPlayer} onSelect={setSelectedPlayer} />
                         </div>
 
                         <div className="space-y-2">
@@ -165,7 +145,7 @@ export const ProfileForm = ({
                                 setShowMoneyTransfer(false);
                                 setTransferError('');
                                 setTransferAmount('');
-                                setSelectedPlayer('');
+                                setSelectedPlayer(undefined);
                             }}
                         >
                             Отмена

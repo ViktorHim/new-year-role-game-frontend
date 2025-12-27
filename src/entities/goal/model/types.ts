@@ -2,7 +2,6 @@ export interface IGoal {
     id: number;
     description: string;
     isCompleted: boolean;
-    disabled: boolean;
     reward: number;
 }
 

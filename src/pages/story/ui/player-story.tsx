@@ -1,3 +1,4 @@
+import { InfoCard } from '@/shared/ui/info-card/info-card';
 import { Title } from '@/shared/ui/title';
 
 interface PlayerStoryProps {
@@ -6,11 +7,11 @@ interface PlayerStoryProps {
 
 export const PlayerStory = ({ story }: PlayerStoryProps) => {
     return (
-        <div className="mb-6">
+        <div className="mb-3">
             <Title classname="mb-2" tier={2}>
                 История персонажа
             </Title>
-            <p className="text-slate-700 leading-relaxed">{story}</p>
+            <InfoCard variant="info">{story}</InfoCard>
         </div>
     );
 };

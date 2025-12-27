@@ -2,7 +2,11 @@ import { Goal } from '@/entities/goal';
 import { useGoals } from '@/entities/goal/store';
 import { Title } from '@/shared/ui/title';
 
-export const FactionGoals = () => {
+interface FactionGoalsProps {
+    disabled?: boolean;
+}
+
+export const FactionGoals = ({ disabled }: FactionGoalsProps) => {
     const { factionGoals, toggleFactionGoal } = useGoals();
 
     return (
@@ -17,6 +21,7 @@ export const FactionGoals = () => {
                         data={goal}
                         onToggle={() => toggleFactionGoal(goal.id, !goal.isCompleted)}
                         variant="faction"
+                        disabled={disabled}
                     />
                 ))}
             </div>

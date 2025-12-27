@@ -1,5 +1,6 @@
 import {
     BookOpenIcon,
+    HomeIcon,
     MapIcon,
     NumberedListIcon,
     UserGroupIcon,
@@ -14,3 +15,5 @@ export const menuItems = [
     { path: RoutePath.RULES, icon: NumberedListIcon },
     { path: RoutePath.MAP, icon: MapIcon },
 ];
+
+export const adminMenuItems = [{ path: RoutePath.ADMIN_HOME, icon: HomeIcon }];

@@ -1,13 +1,19 @@
 import styles from './styles.module.css';
 import { Link, useLocation } from 'react-router';
-import { menuItems } from '../config/menu-items';
+import { adminMenuItems, menuItems } from '../config/menu-items';
 import { HIGHLIGHT_COLOR, IDLE_COLOR } from '../config/colors';
-export const BottomMenu = () => {
+
+interface BottomMenuProps {
+    isAdmin?: boolean;
+}
+
+export const BottomMenu = ({ isAdmin }: BottomMenuProps) => {
     const location = useLocation();
+    const items = isAdmin ? adminMenuItems : menuItems;
 
     return (
         <nav className={styles['bottom-menu']}>
-            {menuItems.map(({ path, icon: Icon }) => {
+            {items.map(({ path, icon: Icon }) => {
                 const isActive = location.pathname === path;
                 return (
                     <Link key={path} to={path} className={isActive ? styles.active : ''}>

@@ -3,14 +3,18 @@ import { Header } from '../../../widgets/header';
 import { BottomMenu } from '../../../widgets/bottom-menu';
 import styles from './styles.module.css';
 
-export const Layout = () => {
+interface LayoutProps {
+    isAdmin?: boolean;
+}
+
+export const Layout = ({ isAdmin = false }: LayoutProps) => {
     return (
         <div className={styles.layout}>
             <Header />
             <main className={styles.main}>
                 <Outlet />
             </main>
-            <BottomMenu />
+            <BottomMenu isAdmin={isAdmin} />
         </div>
     );
 };

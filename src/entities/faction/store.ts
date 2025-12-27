@@ -1,1 +1,1 @@
-export { useFaction } from './model/use-faction';
+export { useFaction, useMyFaction, useOtherFactions } from './model/use-faction';

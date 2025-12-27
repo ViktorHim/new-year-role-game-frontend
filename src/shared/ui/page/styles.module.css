@@ -1,5 +1,6 @@
 .page {
     padding: 10px;
+    padding-bottom: 30px;
     margin: 0 auto;
     max-width: 450px;
     background-color: var(--background-color);

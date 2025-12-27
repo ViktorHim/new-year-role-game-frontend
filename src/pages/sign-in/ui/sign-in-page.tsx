@@ -8,11 +8,13 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 
 export const SignInPage = () => {
-    const { signIn, isAuth } = useAuth();
+    const { signIn, isAuth, isAdmin } = useAuth();
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
 
-    if (isAuth) {
+    if (isAuth && isAdmin) {
+        return <Navigate to={RoutePath.STORY} />;
+    } else if (isAuth) {
         return <Navigate to={RoutePath.STORY} />;
     }
 

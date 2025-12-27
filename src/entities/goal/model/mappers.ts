@@ -8,7 +8,6 @@ export const goalsResponseMapper = (
         id: rawGoal.id,
         isCompleted: rawGoal.is_completed,
         description: rawGoal.description,
-        disabled: false,
         reward: rawGoal.influence_points_reward,
     }));
 };

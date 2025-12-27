@@ -12,11 +12,15 @@ export const InfoAboutPlayers = ({ info }: InfoAboutPlayersProps) => {
                 Информация про других игроков
             </Title>
             <div className="space-y-3">
-                {info.map((info, index) => (
-                    <InfoCard key={index} variant="info">
-                        {info}
-                    </InfoCard>
-                ))}
+                {info && info.length ? (
+                    info.map((info, index) => (
+                        <InfoCard key={index} variant="info">
+                            {info}
+                        </InfoCard>
+                    ))
+                ) : (
+                    <InfoCard variant="info">вы не обладаете информацией о других игроках</InfoCard>
+                )}
             </div>
         </div>
     );

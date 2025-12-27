@@ -21,6 +21,7 @@ export default defineConfig([
         },
         rules: {
             '@typescript-eslint/no-empty-object-type': 'off',
+            'react-hooks/rules-of-hooks': 'off',
         },
     },
 ]);

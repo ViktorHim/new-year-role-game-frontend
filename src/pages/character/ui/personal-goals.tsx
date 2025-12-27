@@ -6,7 +6,7 @@ export const PersonalGoals = () => {
     const { personalGoals, togglePersonalGoal } = useGoals();
 
     return (
-        <div className="mb-6">
+        <div className="mb-2">
             <Title tier={2} classname="mb-3">
                 Личные цели
             </Title>

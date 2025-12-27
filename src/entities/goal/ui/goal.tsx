@@ -10,7 +10,13 @@ interface GoalProps {
     className?: string;
 }
 
-export const Goal = ({ onToggle, data, variant = 'personal', className = '' }: GoalProps) => {
+export const Goal = ({
+    onToggle,
+    data,
+    variant = 'personal',
+    className = '',
+    disabled,
+}: GoalProps) => {
     const variantStyles = {
         personal: {
             default: 'bg-white border-slate-200 hover:border-slate-300',
@@ -26,7 +32,7 @@ export const Goal = ({ onToggle, data, variant = 'personal', className = '' }: G
 
     const styles = variantStyles[variant];
 
-    const { id, description, isCompleted, disabled } = data;
+    const { id, description, isCompleted } = data;
 
     return (
         <div

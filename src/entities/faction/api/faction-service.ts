@@ -1,13 +1,20 @@
 import type { AxiosResponse } from 'axios';
 import { http } from '@/shared/api';
-import type { IFactionResponse } from '../model/types';
+import type { IChangeFactionPayload, IFactionResponse } from '../model/types';
 
 const endpoints = {
-    GET_FACTION: '/player/faction',
+    FACTION: '/player/faction',
+    FACTION_LIST: '/factions',
 };
 
 export const FactionService = {
-    getFaction: (): Promise<AxiosResponse<IFactionResponse>> => {
-        return http.get(endpoints.GET_FACTION);
+    getFaction: (): Promise<AxiosResponse<IFactionResponse | { faction: null }>> => {
+        return http.get(endpoints.FACTION);
+    },
+    changeFaction: (payload: IChangeFactionPayload): Promise<AxiosResponse<void>> => {
+        return http.put(endpoints.FACTION, payload);
+    },
+    getFactionList: (): Promise<AxiosResponse<{ factions: IFactionResponse[] }>> => {
+        return http.get(endpoints.FACTION_LIST);
     },
 };
