@@ -7,6 +7,10 @@ export type {
     IMyContract,
     ContractType,
     ContractStatus,
+    RevealInfoType,
+    IRevealedFaction,
+    IRevealedGoal,
+    IRevealedItem,
 } from './model/types';
 
-export { ContractCard, CreateContractCard, CreateContractModal, SignContractModal } from './ui';
+export { ContractCard, CreateContractCard, CreateContractModal, SignContractModal, RevealInfoModal, ContractResultModal } from './ui';

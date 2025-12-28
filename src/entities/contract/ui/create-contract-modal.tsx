@@ -20,6 +20,7 @@ interface CreateContractModalProps {
     onClose: () => void;
     onCreate: (payload: ICreateContractRequest) => void;
     isLoading?: boolean;
+    activeContractCounts: { type1: number; type2: number };
 }
 
 export const CreateContractModal = ({
@@ -27,18 +28,22 @@ export const CreateContractModal = ({
     onClose,
     onCreate,
     isLoading = false,
+    activeContractCounts,
 }: CreateContractModalProps) => {
     const [selectedPlayerId, setSelectedPlayerId] = useState<number | undefined>(undefined);
     const [selectedType, setSelectedType] = useState<ContractType>('type1');
 
+    const isLimitReached = activeContractCounts[selectedType] >= 3;
+
     const handleSubmit = () => {
-        if (selectedPlayerId) {
-            onCreate({
+        if (selectedPlayerId && !isLimitReached) {
+            const payload: ICreateContractRequest = {
                 contract_type: selectedType,
                 customer_player_id: selectedPlayerId,
-                //TODO убрать
                 duration_seconds: 60,
-            });
+            };
+
+            onCreate(payload);
             handleClose();
         }
     };
@@ -47,6 +52,11 @@ export const CreateContractModal = ({
         setSelectedPlayerId(undefined);
         setSelectedType('type1');
         onClose();
+    };
+
+    const handleTypeChange = (newType: ContractType) => {
+        setSelectedType(newType);
+        setSelectedPlayerId(undefined);
     };
 
     return (
@@ -62,21 +72,10 @@ export const CreateContractModal = ({
                 <div className="space-y-4 py-4 overflow-y-auto flex-1 px-1">
                     <div className="space-y-2">
                         <Label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-                            <User className="w-4 h-4" />
-                            Заказчик
-                        </Label>
-                        <PlayerSelect value={selectedPlayerId} onSelect={setSelectedPlayerId} />
-                    </div>
-
-                    <div className="space-y-2">
-                        <Label className="text-sm font-medium text-slate-700 flex items-center gap-2">
                             <FileText className="w-4 h-4" />
                             Тип договора
                         </Label>
-                        <Select
-                            value={selectedType}
-                            onValueChange={(v) => setSelectedType(v as ContractType)}
-                        >
+                        <Select value={selectedType} onValueChange={handleTypeChange}>
                             <SelectTrigger className="w-full">
                                 <SelectValue />
                             </SelectTrigger>
@@ -88,6 +87,17 @@ export const CreateContractModal = ({
                                 ))}
                             </SelectContent>
                         </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label className="text-sm font-medium text-slate-700 flex items-center gap-2">
+                            <User className="w-4 h-4" />
+                            {selectedType === 'type1' ? 'Заказчик' : 'Игрок, о котором нужно узнать факт'}
+                        </Label>
+                        <PlayerSelect value={selectedPlayerId} onSelect={setSelectedPlayerId} />
+                    </div>
+
+                    <div className="space-y-2">
                         <div className="text-xs text-slate-500 mt-2">
                             <div className="space-y-4 text-xs text-slate-700">
                                 <p className="font-medium text-slate-900">
@@ -161,7 +171,8 @@ export const CreateContractModal = ({
                     <Button
                         type="button"
                         onClick={handleSubmit}
-                        disabled={!selectedPlayerId || isLoading}
+                        disabled={!selectedPlayerId || isLoading || isLimitReached}
+                        title={isLimitReached ? `Достигнут лимит активных договоров типа "${CONTRACT_TYPES.find(t => t.value === selectedType)?.label}"` : ''}
                     >
                         {isLoading ? 'Создание...' : 'Заключить договор'}
                     </Button>

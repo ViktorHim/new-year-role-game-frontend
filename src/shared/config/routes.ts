@@ -13,5 +13,7 @@ export const RoutePath = {
     ADMIN: '/admin',
     ADMIN_HOME: '/admin/home',
     ADMIN_PLAYERS: '/admin/players',
-    ADMIN_FACTIONS: '/admin/factions',
+    ADMIN_GOALS_TASKS: '/admin/goals-tasks',
+    ADMIN_ITEMS_ABILITIES: '/admin/items-abilities',
+    ADMIN_SETTINGS: '/admin/settings',
 } as const;

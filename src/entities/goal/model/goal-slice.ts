@@ -71,6 +71,8 @@ export const createGoalsSlice: ImmerSlice<GoalsStore> = (set, get) => ({
             const response = await GoalService.toggleGoal(id, isCompleted);
             toast(response.data.influence_change);
             get().balance.getBalance();
+            // Refetch personal goals after toggle
+            await get().goals.getPersonalGoals();
         } catch {
             set((state) => {
                 state.goals.personalGoals = previousGoals;
@@ -90,6 +92,8 @@ export const createGoalsSlice: ImmerSlice<GoalsStore> = (set, get) => ({
         try {
             await GoalService.toggleGoal(id, isCompleted);
             get().faction.getFactionList();
+            // Refetch faction goals after toggle
+            await get().goals.getFactionGoals();
         } catch {
             set((state) => {
                 state.goals.factionGoals = previousGoals;

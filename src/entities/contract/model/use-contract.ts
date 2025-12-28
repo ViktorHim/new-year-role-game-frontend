@@ -16,4 +16,5 @@ export const useContractActions = () =>
         getContracts: state.contract.getContracts,
         createContract: state.contract.createContract,
         signContract: state.contract.signContract,
+        revealContract: state.contract.revealContract,
     }));

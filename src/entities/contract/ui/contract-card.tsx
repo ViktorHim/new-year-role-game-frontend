@@ -7,7 +7,7 @@ import { CONTRACT_TYPE_LABELS } from '../model/consts';
 interface ContractCardProps {
     contract: IMyContract | IReceivedContract;
     onSign?: (contract: IReceivedContract) => void;
-    onClaimReward?: (contractId: number) => void;
+    onRevealInfo?: (contractId: number) => void;
 }
 
 const STATUS_CONFIG: Record<ContractStatus, { label: string; className: string }> = {
@@ -33,12 +33,17 @@ const isMyContract = (contract: IMyContract | IReceivedContract): contract is IR
     return 'isCustomer' in contract;
 };
 
-export const ContractCard = ({ contract, onSign, onClaimReward }: ContractCardProps) => {
+export const ContractCard = ({ contract, onSign, onRevealInfo }: ContractCardProps) => {
     const statusConfig = STATUS_CONFIG[contract.status];
     const isCustomer = isMyContract(contract);
 
-    const canClaimReward =
+    const canRevealInfo =
         contract.status === 'completed' && !isCustomer && contract.contractType === 'type2';
+
+    // Override status label for type2 contracts when signed
+    const statusLabel = contract.status === 'signed' && contract.contractType === 'type2'
+        ? 'В исполнении'
+        : statusConfig.label;
 
     return (
         <div className="bg-white border border-slate-200 rounded-lg p-4">
@@ -52,7 +57,7 @@ export const ContractCard = ({ contract, onSign, onClaimReward }: ContractCardPr
                 <div
                     className={`px-3 py-1 rounded-full border text-xs font-medium flex items-center gap-1 ${statusConfig.className}`}
                 >
-                    {statusConfig.label}
+                    {statusLabel}
                 </div>
             </div>
 
@@ -71,7 +76,9 @@ export const ContractCard = ({ contract, onSign, onClaimReward }: ContractCardPr
                             </>
                         ) : (
                             <>
-                                <div className="text-xs text-slate-500">Заказчик</div>
+                                <div className="text-xs text-slate-500">
+                                    {contract.contractType === 'type1' ? 'Заказчик' : 'Игрок, о котором нужно узнать факт'}
+                                </div>
                                 <div className="font-medium text-slate-900">
                                     {contract.customerPlayerName}
                                 </div>
@@ -100,15 +107,15 @@ export const ContractCard = ({ contract, onSign, onClaimReward }: ContractCardPr
                     </Button>
                 )}
 
-                {canClaimReward && onClaimReward && (
+                {canRevealInfo && onRevealInfo && (
                     <Button
-                        onClick={() => onClaimReward(contract.id)}
+                        onClick={() => onRevealInfo(contract.id)}
                         variant="outline"
                         className="w-full"
                         size="sm"
                     >
                         <Eye className="w-4 h-4 mr-2" />
-                        Забрать награду
+                        Узнать факт
                     </Button>
                 )}
             </div>

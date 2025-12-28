@@ -1,6 +1,7 @@
 import { Navigate, Outlet } from 'react-router';
 import { useAuth } from '../model/use-auth';
 import { RoutePath } from '../../../shared/config';
+import { PageLoader } from '../../../shared/ui/page-loader';
 
 interface RequireAuthProps {
     redirectTo?: string;
@@ -16,7 +17,7 @@ export const RequireAuth = ({
     const { isAuth, isLoading, isAdmin } = useAuth();
 
     if (isLoading) {
-        return <div>Проверка авторизации...</div>;
+        return <PageLoader />;
     }
 
     if (!isAuth) {

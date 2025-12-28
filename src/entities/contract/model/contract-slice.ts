@@ -1,4 +1,4 @@
-import type { IMyContract, IReceivedContract, ICreateContractRequest } from './types';
+import type { IMyContract, IReceivedContract, ICreateContractRequest, RevealInfoType, IRevealContractResponse } from './types';
 import { ContractService } from '../api/contract-service';
 import { contractsListMapper } from './mappers';
 import type { ImmerSlice } from '@/app/store';
@@ -13,6 +13,7 @@ export interface ContractStore {
     getContracts: () => Promise<void>;
     createContract: (payload: ICreateContractRequest) => Promise<void>;
     signContract: (contractId: number) => Promise<void>;
+    revealContract: (contractId: number, infoCategory: RevealInfoType) => Promise<IRevealContractResponse>;
 }
 
 export const createContractSlice: ImmerSlice<ContractStore> = (set, get) => ({
@@ -28,7 +29,11 @@ export const createContractSlice: ImmerSlice<ContractStore> = (set, get) => ({
 
         try {
             const response = await ContractService.getContracts();
-            const allContracts = contractsListMapper(response.data.contracts);
+            // Filter out contracts where info_revealed === true
+            const filteredContracts = response.data.contracts.filter(
+                (contract) => contract.info_revealed !== true
+            );
+            const allContracts = contractsListMapper(filteredContracts);
 
             const myContracts: IMyContract[] = [];
             const receivedContracts: IReceivedContract[] = [];
@@ -83,6 +88,16 @@ export const createContractSlice: ImmerSlice<ContractStore> = (set, get) => ({
             await get().contract.getContracts();
         } catch {
             toast.error('Ошибка подписания договора');
+        }
+    },
+
+    revealContract: async (contractId: number, infoCategory: RevealInfoType) => {
+        try {
+            const response = await ContractService.revealContract(contractId, { info_category: infoCategory });
+            return response.data;
+        } catch (error) {
+            toast.error('Ошибка раскрытия информации');
+            throw error;
         }
     },
 });

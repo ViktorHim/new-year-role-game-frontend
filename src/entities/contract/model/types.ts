@@ -21,6 +21,7 @@ export interface IContractResponse {
     is_executor: boolean;
     can_sign: boolean;
     can_complete: boolean;
+    info_revealed?: boolean;
 }
 
 export interface IContractsResponse {
@@ -61,6 +62,37 @@ export interface ICreateContractRequest {
     contract_type: ContractType;
     customer_player_id: number;
     duration_seconds: number;
+}
+
+export type RevealInfoType = 'faction' | 'goal' | 'item';
+
+export interface IRevealContractRequest {
+    info_category: RevealInfoType;
+}
+
+export interface IRevealedFaction {
+    faction_id: number | null;
+    faction_name: string;
+}
+
+export interface IRevealedGoal {
+    goal_description: string;
+    goal_id: number;
+    goal_title: string;
+}
+
+export interface IRevealedItem {
+    item_description: string;
+    item_id: number;
+    item_name: string;
+}
+
+export interface IRevealContractResponse {
+    message: string;
+    revealed_info: {
+        info_type: RevealInfoType;
+        data: IRevealedFaction | IRevealedGoal | IRevealedItem;
+    };
 }
 
 export interface ICreateContractResponse {

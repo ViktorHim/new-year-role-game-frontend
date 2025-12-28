@@ -17,6 +17,7 @@ interface SignContractModalProps {
     onClose: () => void;
     onConfirm: (contractId: number) => void;
     isLoading?: boolean;
+    activeContractCounts: { type1: number; type2: number };
 }
 
 export const SignContractModal = ({
@@ -25,8 +26,11 @@ export const SignContractModal = ({
     onClose,
     onConfirm,
     isLoading = false,
+    activeContractCounts,
 }: SignContractModalProps) => {
     if (!contract) return null;
+
+    const isLimitReached = activeContractCounts[contract.contractType] >= 3;
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
@@ -113,7 +117,8 @@ export const SignContractModal = ({
                     <Button
                         type="button"
                         onClick={() => onConfirm(contract.id)}
-                        disabled={isLoading}
+                        disabled={isLoading || isLimitReached}
+                        title={isLimitReached ? `Достигнут лимит активных договоров типа "${CONTRACT_TYPES.find(t => t.value === contract.contractType)?.label}"` : ''}
                     >
                         {isLoading ? 'Подписание...' : 'Подписать'}
                     </Button>
