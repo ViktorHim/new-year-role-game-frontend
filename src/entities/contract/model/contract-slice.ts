@@ -41,9 +41,9 @@ export const createContractSlice: ImmerSlice<ContractStore> = (set, get) => ({
                 }
 
                 if ('isCustomer' in contract) {
-                    myContracts.push(contract);
-                } else {
                     receivedContracts.push(contract);
+                } else {
+                    myContracts.push(contract);
                 }
             });
 

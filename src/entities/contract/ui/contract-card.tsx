@@ -1,45 +1,35 @@
 import { Button } from '@/shared/ui/button';
-import { Clock, DollarSign, Users, CheckCircle, XCircle, Eye } from 'lucide-react';
+import { Users, Eye } from 'lucide-react';
 import type { IMyContract, IReceivedContract, ContractStatus } from '../model/types';
+import { BanknotesIcon } from '@heroicons/react/16/solid';
+import { CONTRACT_TYPE_LABELS } from '../model/consts';
 
 interface ContractCardProps {
     contract: IMyContract | IReceivedContract;
-    onSign?: (contractId: number) => void;
+    onSign?: (contract: IReceivedContract) => void;
     onClaimReward?: (contractId: number) => void;
 }
 
-const STATUS_CONFIG: Record<
-    ContractStatus,
-    { label: string; icon: React.ReactNode; className: string }
-> = {
+const STATUS_CONFIG: Record<ContractStatus, { label: string; className: string }> = {
     pending: {
         label: 'Ожидает подписи',
-        icon: <Clock className="w-4 h-4" />,
         className: 'bg-amber-50 text-amber-700 border-amber-200',
     },
     signed: {
         label: 'Подписан',
-        icon: <CheckCircle className="w-4 h-4" />,
         className: 'bg-blue-50 text-blue-700 border-blue-200',
     },
     completed: {
         label: 'Завершен',
-        icon: <CheckCircle className="w-4 h-4" />,
         className: 'bg-green-50 text-green-700 border-green-200',
     },
     terminated: {
         label: 'Отменен',
-        icon: <XCircle className="w-4 h-4" />,
-        className: 'bg-slate-50 text-slate-700 border-slate-200',
+        className: 'bg-slate-50 text-rose-700 border-rose-200',
     },
 };
 
-const CONTRACT_TYPE_LABELS = {
-    type1: 'Договор типа 1',
-    type2: 'Договор типа 2',
-};
-
-const isMyContract = (contract: IMyContract | IReceivedContract): contract is IMyContract => {
+const isMyContract = (contract: IMyContract | IReceivedContract): contract is IReceivedContract => {
     return 'isCustomer' in contract;
 };
 
@@ -47,90 +37,69 @@ export const ContractCard = ({ contract, onSign, onClaimReward }: ContractCardPr
     const statusConfig = STATUS_CONFIG[contract.status];
     const isCustomer = isMyContract(contract);
 
-    // Определяем можно ли забрать награду (completed + isExecutor + type2)
     const canClaimReward =
         contract.status === 'completed' && !isCustomer && contract.contractType === 'type2';
 
     return (
         <div className="bg-white border border-slate-200 rounded-lg p-4">
-            {/* Заголовок */}
             <div className="flex items-start justify-between mb-3">
                 <div>
                     <h3 className="font-semibold text-slate-900">
                         {CONTRACT_TYPE_LABELS[contract.contractType]}
                     </h3>
-                    <p className="text-sm text-slate-500 mt-0.5">ID: {contract.id}</p>
                 </div>
 
-                {/* Статус */}
                 <div
                     className={`px-3 py-1 rounded-full border text-xs font-medium flex items-center gap-1 ${statusConfig.className}`}
                 >
-                    {statusConfig.icon}
                     {statusConfig.label}
                 </div>
             </div>
 
-            {/* Информация о контрагенте */}
             <div className="bg-slate-50 rounded-lg p-3 mb-3">
-                {isCustomer ? (
-                    // Я заказчик - показываю исполнителя
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                            <Users className="w-5 h-5 text-purple-600" />
-                        </div>
-                        <div>
-                            <div className="text-xs text-slate-500">Исполнитель</div>
-                            <div className="font-medium text-slate-900">
-                                {contract.executorPlayerName}
-                            </div>
-                        </div>
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center">
+                        <Users className="w-5 h-5 text-slate-900" />
                     </div>
-                ) : (
-                    // Я исполнитель - показываю заказчика
                     <div>
-                        <div className="flex items-center gap-3 mb-2">
-                            <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                                <Users className="w-5 h-5 text-purple-600" />
-                            </div>
-                            <div>
+                        {isCustomer ? (
+                            <>
+                                <div className="text-xs text-slate-500">Исполнитель</div>
+                                <div className="font-medium text-slate-900">
+                                    {contract.executorPlayerName}
+                                </div>
+                            </>
+                        ) : (
+                            <>
                                 <div className="text-xs text-slate-500">Заказчик</div>
                                 <div className="font-medium text-slate-900">
                                     {contract.customerPlayerName}
                                 </div>
-                            </div>
-                        </div>
-                        <div className="text-xs text-slate-600">
-                            Фракция:{' '}
-                            <span className="font-medium">{contract.customerFactionName}</span>
-                        </div>
-                    </div>
-                )}
-            </div>
-
-            {/* Вознаграждение */}
-            <div className="space-y-2 mb-3">
-                <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-600">
-                        {isCustomer ? 'Вы получите:' : 'Вы получите:'}
-                    </span>
-                    <div className="flex items-center gap-1 font-semibold text-green-600">
-                        <DollarSign className="w-4 h-4" />
-                        {contract.moneyReward}
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
 
-            {/* Действия */}
+            <div className="space-y-2 mb-3">
+                <div className="flex items-center gap-1 text-sm">
+                    <span className="text-slate-600">
+                        {contract.status === 'completed' ? 'Вы получили:' : 'Вы получите:'}
+                    </span>
+                    <div className="flex items-center gap-1 font-semibold text-amber-600">
+                        {contract.moneyReward}
+                        <BanknotesIcon className="w-4 h-4" />
+                    </div>
+                </div>
+            </div>
+
             <div className="space-y-2">
-                {/* Кнопка подписания (для заказчика, если pending) */}
                 {isCustomer && contract.status === 'pending' && contract.canSign && onSign && (
-                    <Button onClick={() => onSign(contract.id)} className="w-full" size="sm">
+                    <Button onClick={() => onSign(contract)} className="w-full" size="sm">
                         Подписать договор
                     </Button>
                 )}
 
-                {/* Кнопка забрать награду (для исполнителя type2, если completed) */}
                 {canClaimReward && onClaimReward && (
                     <Button
                         onClick={() => onClaimReward(contract.id)}
@@ -142,11 +111,6 @@ export const ContractCard = ({ contract, onSign, onClaimReward }: ContractCardPr
                         Забрать награду
                     </Button>
                 )}
-
-                {/* Информация о длительности */}
-                <div className="text-xs text-slate-500 text-center">
-                    Длительность: {Math.floor(contract.durationSeconds / 3600)} ч
-                </div>
             </div>
         </div>
     );

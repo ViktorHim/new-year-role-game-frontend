@@ -1,1 +1,1 @@
-export { useGoals } from './model/use-goals';
+export { useGoals, useAvaiblePersonalGoals } from './model/use-goals';

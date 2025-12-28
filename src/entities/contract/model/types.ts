@@ -37,7 +37,7 @@ interface IBaseContract {
     canComplete: boolean;
 }
 
-export interface IMyContract extends IBaseContract {
+export interface IReceivedContract extends IBaseContract {
     executorPlayerId: number;
     executorPlayerName: string;
     executorPlayerAvatar: string | null;
@@ -45,7 +45,7 @@ export interface IMyContract extends IBaseContract {
     isCustomer: true;
 }
 
-export interface IReceivedContract extends IBaseContract {
+export interface IMyContract extends IBaseContract {
     customerPlayerId: number;
     customerPlayerName: string;
     customerPlayerAvatar: string | null;

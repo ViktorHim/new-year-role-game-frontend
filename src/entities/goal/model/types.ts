@@ -3,6 +3,8 @@ export interface IGoal {
     description: string;
     isCompleted: boolean;
     reward: number;
+    isVisible?: boolean;
+    isLocked?: boolean;
 }
 
 export type GoalType = 'personal' | 'faction';

@@ -14,7 +14,7 @@ export const ProfileForm = () => {
     const { influence, money, getBalance, transferMoney } = useBalance();
     const { getMyFaction, myFactionInfo: faction } = useFaction();
 
-    const factionName = faction?.name ?? 'Нет фракции';
+    const factionName = faction?.name ?? 'Нейтрал';
 
     const [showMoneyTransfer, setShowMoneyTransfer] = useState(false);
     const [transferError, setTransferError] = useState('');

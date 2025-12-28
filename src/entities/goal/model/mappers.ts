@@ -9,5 +9,7 @@ export const goalsResponseMapper = (
         isCompleted: rawGoal.is_completed,
         description: rawGoal.description,
         reward: rawGoal.influence_points_reward,
+        isLocked: rawGoal.is_locked,
+        isVisible: rawGoal.is_visible,
     }));
 };
