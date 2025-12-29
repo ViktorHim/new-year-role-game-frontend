@@ -39,7 +39,7 @@ export const CreateContractModal = ({
 
     const type: ContractType = player?.id === 21 ? 'type1' : 'type2';
 
-    const isLimitReached = activeContractCounts[selectedType] >= 3;
+    const isLimitReached = activeContractCounts[type] >= 3;
 
     const handleSubmit = () => {
         if (selectedPlayerId && !isLimitReached) {
@@ -79,9 +79,7 @@ export const CreateContractModal = ({
                     <div className="space-y-2">
                         <Label className="text-sm font-medium text-slate-700 flex items-center gap-2">
                             <User className="w-4 h-4" />
-                            {selectedType === 'type1'
-                                ? 'Заказчик'
-                                : 'Игрок, о котором нужно узнать факт'}
+                            {type === 'type1' ? 'Заказчик' : 'Игрок, о котором нужно узнать факт'}
                         </Label>
                         <PlayerSelect value={selectedPlayerId} onSelect={setSelectedPlayerId} />
                     </div>
@@ -90,10 +88,7 @@ export const CreateContractModal = ({
                         <div className="text-xs text-slate-500 mt-2">
                             <div className="space-y-4 text-xs text-slate-700">
                                 <p className="font-medium text-slate-900">
-                                    {
-                                        CONTRACT_TYPES.find((t) => t.value === selectedType)
-                                            ?.description
-                                    }
+                                    {CONTRACT_TYPES.find((t) => t.value === type)?.description}
                                     При подписании договора действуют следующие условия:
                                 </p>
 
@@ -163,7 +158,7 @@ export const CreateContractModal = ({
                         disabled={!selectedPlayerId || isLoading || isLimitReached}
                         title={
                             isLimitReached
-                                ? `Достигнут лимит активных договоров типа "${CONTRACT_TYPES.find((t) => t.value === selectedType)?.label}"`
+                                ? `Достигнут лимит активных договоров типа "${CONTRACT_TYPES.find((t) => t.value === type)?.label}"`
                                 : ''
                         }
                     >
