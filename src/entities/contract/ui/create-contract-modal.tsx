@@ -14,6 +14,7 @@ import { FileText, User } from 'lucide-react';
 import type { ContractType, ICreateContractRequest } from '../model/types';
 import { PlayerSelect } from '@/entities/players';
 import { CONTRACT_TYPES } from '../model/consts';
+import { useAuth } from '@/features/auth/store';
 
 interface CreateContractModalProps {
     isOpen: boolean;
@@ -32,13 +33,18 @@ export const CreateContractModal = ({
 }: CreateContractModalProps) => {
     const [selectedPlayerId, setSelectedPlayerId] = useState<number | undefined>(undefined);
     const [selectedType, setSelectedType] = useState<ContractType>('type1');
+    const { player } = useAuth();
+
+    if (player?.id !== 21 && player?.id !== 17) return null;
+
+    const type: ContractType = player?.id === 21 ? 'type1' : 'type2';
 
     const isLimitReached = activeContractCounts[selectedType] >= 3;
 
     const handleSubmit = () => {
         if (selectedPlayerId && !isLimitReached) {
             const payload: ICreateContractRequest = {
-                contract_type: selectedType,
+                contract_type: type,
                 customer_player_id: selectedPlayerId,
                 duration_seconds: 60,
             };
@@ -72,27 +78,10 @@ export const CreateContractModal = ({
                 <div className="space-y-4 py-4 overflow-y-auto flex-1 px-1">
                     <div className="space-y-2">
                         <Label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-                            <FileText className="w-4 h-4" />
-                            Тип договора
-                        </Label>
-                        <Select value={selectedType} onValueChange={handleTypeChange}>
-                            <SelectTrigger className="w-full">
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {CONTRACT_TYPES.map((type) => (
-                                    <SelectItem key={type.value} value={type.value}>
-                                        {type.label}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
-
-                    <div className="space-y-2">
-                        <Label className="text-sm font-medium text-slate-700 flex items-center gap-2">
                             <User className="w-4 h-4" />
-                            {selectedType === 'type1' ? 'Заказчик' : 'Игрок, о котором нужно узнать факт'}
+                            {selectedType === 'type1'
+                                ? 'Заказчик'
+                                : 'Игрок, о котором нужно узнать факт'}
                         </Label>
                         <PlayerSelect value={selectedPlayerId} onSelect={setSelectedPlayerId} />
                     </div>
@@ -172,7 +161,11 @@ export const CreateContractModal = ({
                         type="button"
                         onClick={handleSubmit}
                         disabled={!selectedPlayerId || isLoading || isLimitReached}
-                        title={isLimitReached ? `Достигнут лимит активных договоров типа "${CONTRACT_TYPES.find(t => t.value === selectedType)?.label}"` : ''}
+                        title={
+                            isLimitReached
+                                ? `Достигнут лимит активных договоров типа "${CONTRACT_TYPES.find((t) => t.value === selectedType)?.label}"`
+                                : ''
+                        }
                     >
                         {isLoading ? 'Создание...' : 'Заключить договор'}
                     </Button>

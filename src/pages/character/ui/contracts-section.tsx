@@ -13,6 +13,7 @@ import {
     type IRevealedItem,
 } from '@/entities/contract';
 import { useContract } from '@/entities/contract/store';
+import { useAuth } from '@/features/auth/store';
 import { Title } from '@/shared/ui/title';
 import { useEffect, useState, useMemo } from 'react';
 
@@ -27,6 +28,8 @@ export const ContractsSection = () => {
         signContract,
         revealContract,
     } = useContract();
+
+    const { player } = useAuth();
 
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [contractToSign, setContractToSign] = useState<IReceivedContract | null>(null);
@@ -89,7 +92,7 @@ export const ContractsSection = () => {
     // Count active contracts by type
     const activeContractCounts = useMemo(() => {
         const allActiveContracts = [...myContracts, ...receivedContracts].filter(
-            (contract) => contract.status === 'pending' || contract.status === 'signed'
+            (contract) => contract.status === 'pending' || contract.status === 'signed',
         );
 
         return {
@@ -98,7 +101,9 @@ export const ContractsSection = () => {
         };
     }, [myContracts, receivedContracts]);
 
-    const canCreateContract = activeContractCounts.type1 < 3 || activeContractCounts.type2 < 3;
+    const canCreateContract =
+        (activeContractCounts.type1 < 3 && player?.id === 21) ||
+        (activeContractCounts.type2 < 3 && player?.id === 17);
 
     if (isLoading && myContracts.length === 0 && receivedContracts.length === 0) {
         return <div>Загрузка договоров...</div>;
@@ -106,9 +111,11 @@ export const ContractsSection = () => {
 
     return (
         <>
-            <Title tier={2} classname="mb-2">
-                Договоры
-            </Title>
+            {(myContracts.length > 0 || canCreateContract) && (
+                <Title tier={2} classname="mb-2">
+                    Договоры
+                </Title>
+            )}
             <div className="space-y-3">
                 {canCreateContract && (
                     <CreateContractCard onClick={() => setIsCreateModalOpen(true)} />
